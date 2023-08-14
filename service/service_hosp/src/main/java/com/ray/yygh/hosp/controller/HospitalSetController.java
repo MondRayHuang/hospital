@@ -46,7 +46,7 @@ public class HospitalSetController {
     @GetMapping("findPageHospSet/{current}/{limit}")
     public Result findPageHospSet(@PathVariable long current,
                                   @PathVariable long limit,
-                                  HospitalSetQueryVo hospitalSetQueryVo){
+                                  @RequestBody(required = false) HospitalSetQueryVo hospitalSetQueryVo){
 
 
     //创建分页对象，传递当前页
