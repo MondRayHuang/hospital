@@ -2,6 +2,7 @@ package com.ray.yygh.hosp.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ray.yygh.common.exception.YyghException;
 import com.ray.yygh.common.result.Result;
 import com.ray.yygh.common.utils.MD5;
 import com.ray.yygh.hosp.service.HospitalSetService;
@@ -45,7 +46,7 @@ public class HospitalSetController {
     }
 
     @ApiOperation("条件分页查询")
-    @GetMapping("findPageHospSet/{current}/{limit}")
+    @PostMapping("findPageHospSet/{current}/{limit}")
     public Result findPageHospSet(@PathVariable long current,
                                   @PathVariable long limit,
                                   @RequestBody(required = false) HospitalSetQueryVo hospitalSetQueryVo){
@@ -84,4 +85,58 @@ public class HospitalSetController {
             return Result.fail();
         }
     }
+
+    @ApiOperation("根据医院id查询医院设置")
+    @GetMapping("getHospSet/{id}")
+    public Result getHospSet(@PathVariable Long id){
+        HospitalSet hospitalSet = hospitalSetService.getById(id);
+        return Result.ok(hospitalSet);
+    }
+
+    @ApiOperation("修改医院设置")
+    @PostMapping("updateHospitalSet")
+    public Result updateHospitalSet(@RequestBody HospitalSet hospitalSet){
+        boolean flag = hospitalSetService.updateById(hospitalSet);
+        if(flag){
+            return Result.ok();
+        } else {
+            return Result.fail();
+        }
+    }
+
+    @ApiOperation("批量删除医院设置")
+    @DeleteMapping("batchRemove")
+    public Result batchRemove(@RequestBody List<Long> idList){
+        hospitalSetService.removeByIds(idList);
+        return Result.ok();
+    }
+
+    @ApiOperation("医院设置锁定和解锁")
+    @PutMapping("lockHospitalSet/{id}/{status}")
+    public Result lockHospitalSet(@PathVariable Long id,
+                                  @PathVariable Integer status){
+        //根据 id 查询出医院设置
+        HospitalSet hospitalSet = hospitalSetService.getById(id);
+        //修改医院设置的状态
+        hospitalSet.setStatus(status);
+        //更新医院设置
+        hospitalSetService.updateById(hospitalSet);
+        return Result.ok();
+    }
+
+    @ApiOperation("发送签名密钥")
+    @PutMapping("sendKey/{id}")
+    public Result sendKey(@PathVariable Long id){
+        //通过 id 查询医院设置
+        HospitalSet hospitalSet = hospitalSetService.getById(id);
+        //获取医院的医院密钥
+        String signKey = hospitalSet.getSignKey();
+        //获取医院的医院编号
+        String hoscode = hospitalSet.getHoscode();
+        System.out.println();
+        // TODO: 2023/8/15 发送短信
+        return Result.ok();
+    }
+
+
 }
