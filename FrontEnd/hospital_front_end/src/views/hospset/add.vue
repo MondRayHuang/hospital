@@ -34,10 +34,17 @@
       
     },
     created() {
+      if(this.$route.params && this.$route.params.id){
+         const id = this.$route.params.id         
+         this.getHospSet(id)
+      } else{
+         this.hospitalSet = {}
+      }
 
     },
     methods: {
-      saveOrUpdate(){
+      // 添加医院设置
+      save(){
         hospset.saveHospSet(this.hospitalSet)
             .then(response => {
               // 提示
@@ -47,7 +54,37 @@
               })
               this.$router.push({path:`/hospSet/list`})
             })
-        
+      },
+
+      // 修改医院设置
+      update() {
+         hospset.updateHospSet(this.hospitalSet)
+            .then(response => {
+               // 提示
+               this.$message({
+                  type: 'success',
+                  message: '修改成功!'
+               })
+               this.$router.push({path:'/hospSet/list'})
+            })
+      },
+
+      // 修改或添加
+      saveOrUpdate(){
+         // 判断添加还是修改
+         if(this.hospitalSet.id){
+            this.update()
+         }else{
+            this.save()
+         }
+      },
+
+      // 根据 id 获取医院设置
+      getHospSet(id){
+         hospset.getHospSet(id)
+            .then(response => {
+               this.hospitalSet = response.data
+            })
       }
     }
   }

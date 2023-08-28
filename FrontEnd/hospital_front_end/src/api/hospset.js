@@ -43,5 +43,22 @@ export default{
             method:'post',
             data: hospitalSet
         })
+    },
+
+    // 医院设置修改功能
+    updateHospSet(hospitalSet){
+        return request({
+            url:'/admin/hosp/hospitalSet/updateHospitalSet',
+            method:'post',
+            data:hospitalSet
+        })
+    },
+
+    // 医院设置详细信息
+    getHospSet(id){
+        return request({
+            url: `/admin/hosp/hospitalSet/getHospSet/${id}`,
+            method: 'get'
+        })
     }
 } 

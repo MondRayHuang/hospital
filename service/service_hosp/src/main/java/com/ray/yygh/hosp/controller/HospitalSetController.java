@@ -55,7 +55,6 @@ public class HospitalSetController {
 
     //创建分页对象，传递当前页
         Page<HospitalSet> page = new Page<>(current,limit);
-        System.out.println(limit);
         QueryWrapper<HospitalSet> hospitalSetQueryWrapper = new QueryWrapper<>();
         String hosname = hospitalSetQueryVo.getHosname();
         String hoscode = hospitalSetQueryVo.getHoscode();

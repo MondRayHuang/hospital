@@ -45,6 +45,9 @@
          icon="el-icon-star-on" @click="lockHospSet(scope.row.id,0)">锁定</el-button>
       <el-button v-if="scope.row.status == 0" type="primary" size="mini" 
          icon="el-icon-star-off" @click="lockHospSet(scope.row.id,1)">取消锁定</el-button>
+      <router-link :to="'/hospSet/edit/'+scope.row.id">
+          <el-button type="primary" size="mini" icon="el-icon-edit">编辑</el-button>
+      </router-link>
    </template>
   </el-table-column>
 
