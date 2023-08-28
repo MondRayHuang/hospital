@@ -1,0 +1,10 @@
+2023-08-25 15:22:46.274 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=31m48s311ms).
+2023-08-25 16:22:40.315 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=17m23s593ms).
+2023-08-25 16:31:51.532 [http-nio-8201-exec-10] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.dao.DataIntegrityViolationException: 
+### Error updating database.  Cause: com.mysql.cj.jdbc.exceptions.MysqlDataTruncation: Data truncation: Data too long for column 'contacts_phone' at row 1
+### The error may exist in com/ray/yygh/hosp/mapper/HospitalSetMapper.java (best guess)
+### The error may involve com.ray.yygh.hosp.mapper.HospitalSetMapper.insert-Inline
+### The error occurred while setting parameters
+### SQL: INSERT INTO hospital_set  ( hosname, hoscode, api_url, sign_key, contacts_name, contacts_phone, status )  VALUES  ( ?, ?, ?, ?, ?, ?, ? )
+### Cause: com.mysql.cj.jdbc.exceptions.MysqlDataTruncation: Data truncation: Data too long for column 'contacts_phone' at row 1
+; Data truncation: Data too long for column 'contacts_phone' at row 1; nested exception is com.mysql.cj.jdbc.exceptions.MysqlDataTruncation: Data truncation: Data too long for column 'contacts_phone' at row 1]
