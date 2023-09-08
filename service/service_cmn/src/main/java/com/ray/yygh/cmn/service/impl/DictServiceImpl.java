@@ -12,6 +12,7 @@ import org.apache.http.HttpResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,6 +53,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
 
     // 根据数据字典 id 查询子列表
     @Override
+    @Cacheable(value = "dict",keyGenerator = "keyGenerator")
     public List<Dict> findChildData(Long id) {
         QueryWrapper<Dict> dictQueryWrapper = new QueryWrapper<>();
         dictQueryWrapper.eq("parent_id",id);
@@ -64,6 +66,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
 
     // 导入数据字典
     @Override
+    @CacheEvict(value = "dict",allEntries = true)
     public void importDictData(MultipartFile multipartFile) {
         try{
             System.out.println(multipartFile.toString());
