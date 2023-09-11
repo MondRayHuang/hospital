@@ -2,17 +2,14 @@ package com.ray.yygh.hosp.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ray.yygh.common.exception.YyghException;
 import com.ray.yygh.common.result.Result;
-import com.ray.yygh.common.utils.MD5;
+import com.ray.yygh.common.util.MD5;
 import com.ray.yygh.hosp.service.HospitalSetService;
 import com.ray.yygh.model.hosp.HospitalSet;
 import com.ray.yygh.vo.hosp.HospitalSetQueryVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request from '@/util/request'
 
 export default{
     // 医院设置列表
@@ -61,4 +61,4 @@ export default{
             method: 'get'
         })
     }
-} 
+}

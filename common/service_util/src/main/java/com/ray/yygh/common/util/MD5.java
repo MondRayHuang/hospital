@@ -1,4 +1,4 @@
-package com.ray.yygh.common.utils;
+package com.ray.yygh.common.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

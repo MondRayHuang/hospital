@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request from '@/util/request'
 
 export default{
     dictList(id){// 数据字典列表
