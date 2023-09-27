@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @MapperScan("com.ray.yygh.hosp.mapper")
-@ComponentScan(basePackages = "com.ray")
 public class HospConfig {
     /**
      * 分页插件

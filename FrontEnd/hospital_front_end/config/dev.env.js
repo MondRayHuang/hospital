@@ -8,9 +8,9 @@ module.exports = merge(prodEnv, {
   // BASE_API: '"http://localhost:8202"',
 
   // mac版本
-  // BASE_API: '"http://10.211.55.4:8000"',
-  
+  BASE_API: '"http://10.211.55.4:8000"',
+
   // win版本
-  BASE_API: '"http://192.168.140.128:8000"',
+  // BASE_API: '"http://192.168.140.128:8000"',
 
 })

@@ -15,10 +15,10 @@ spring:
     prefix: classpath:/templates/
   redis:
     #mac
-    #host: 10.211.55.4
+    host: 10.211.55.4
 
     #win
-    host: 192.168.140.128
+#    host: 192.168.140.128
     port: 6379
     database: 0
     timeout: 1800000
