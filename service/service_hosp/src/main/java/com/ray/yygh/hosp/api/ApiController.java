@@ -6,13 +6,21 @@ import com.ray.yygh.common.helper.HttpRequestHelper;
 import com.ray.yygh.common.result.Result;
 import com.ray.yygh.common.result.ResultCodeEnum;
 import com.ray.yygh.common.util.MD5;
+import com.ray.yygh.hosp.service.DepartmentService;
 import com.ray.yygh.hosp.service.HospitalService;
 import com.ray.yygh.hosp.service.HospitalSetService;
+import com.ray.yygh.hosp.service.ScheduleService;
+import com.ray.yygh.model.hosp.Department;
 import com.ray.yygh.model.hosp.Hospital;
 import com.ray.yygh.model.hosp.HospitalSet;
+import com.ray.yygh.model.hosp.Schedule;
+import com.ray.yygh.vo.hosp.DepartmentQueryVo;
+import com.ray.yygh.vo.hosp.ScheduleQueryVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +38,177 @@ public class ApiController {
 
     @Autowired
     private HospitalSetService hospitalSetService;
+
+    @Autowired
+    private DepartmentService departmentService;
+
+    @Autowired
+    private ScheduleService scheduleService;
+
+    //医院端删除排班信息
+    @PostMapping("schedule/remove")
+    public Result remove(HttpServletRequest request){
+        Map<String,String[]> requestMap = request.getParameterMap();
+        Map<String, Object> paramMap = HttpRequestHelper.switchMap(requestMap);
+
+        //验签
+        //获取医院端传过来的 hoscode
+        String hoscode = (String) paramMap.get("hoscode");
+        //获取医院端传过来的加密后的签名
+        String hospSign = (String) paramMap.get("sign");
+        //获取医院端传过来的排班的编号
+        String hosScheduleId = (String) paramMap.get("hosScheduleId");
+        //获取后端存放着的签名
+        String signKey = hospitalSetService.getSignKey(hoscode);
+        //对后端签名进行加密
+        String signKeyMd5 = MD5.encrypt(signKey);
+        //进行验签
+        if(!hospSign.equals(signKeyMd5)){
+            throw new YyghException(ResultCodeEnum.SIGN_ERROR);
+        }
+
+        scheduleService.remove(hoscode,hosScheduleId);
+        return Result.ok();
+    }
+
+
+
+    //医院端查询排班信息
+    @PostMapping("schedule/list")
+    public Result findSchedule(HttpServletRequest request){
+        Map<String,String[]> requestMap = request.getParameterMap();
+        Map<String, Object> paramMap = HttpRequestHelper.switchMap(requestMap);
+
+        //验签
+        //获取医院端传过来的 hoscode
+        String hoscode = (String) paramMap.get("hoscode");
+        //获取医院端传过来的加密后的签名
+        String hospSign = (String) paramMap.get("sign");
+        //获取医院端传过来的科室的编号
+        String depcode = (String) paramMap.get("depcode");
+        //获取后端存放着的签名
+        String signKey = hospitalSetService.getSignKey(hoscode);
+        //对后端签名进行加密
+        String signKeyMd5 = MD5.encrypt(signKey);
+        //进行验签
+        if(!hospSign.equals(signKeyMd5)){
+            throw new YyghException(ResultCodeEnum.SIGN_ERROR);
+        }
+        //分页信息
+        int page = StringUtils.isEmpty(paramMap.get("page")) ? 1 : Integer.parseInt((String)paramMap.get("page"));
+        int limit = StringUtils.isEmpty(paramMap.get("limit")) ? 1 : Integer.parseInt((String)paramMap.get("limit"));
+        ScheduleQueryVo scheduleQueryVo = new ScheduleQueryVo();
+        scheduleQueryVo.setHoscode(hoscode);
+        scheduleQueryVo.setDepcode(depcode);
+        //调用service方法
+        Page<Schedule> schedulePage = scheduleService.findPageSchedule(page,limit,scheduleQueryVo);
+        return Result.ok(schedulePage);
+    }
+
+    //医院端上传排班信息
+    @PostMapping("saveSchedule")
+    public Result saveSchedule(HttpServletRequest request){
+        Map<String,String[]> requestMap = request.getParameterMap();
+        Map<String, Object> paramMap = HttpRequestHelper.switchMap(requestMap);
+
+        //获取医院端传过来的 hoscode
+        String hoscode = (String) paramMap.get("hoscode");
+        //获取医院端传过来的加密后的签名
+        String hospSign = (String) paramMap.get("sign");
+        //获取医院端传过来的科室的编号
+        String depcode = (String) paramMap.get("depcode");
+        //获取后端存放着的签名
+        String signKey = hospitalSetService.getSignKey(hoscode);
+        //对后端签名进行加密
+        String signKeyMd5 = MD5.encrypt(signKey);
+        //进行验签
+        if(!hospSign.equals(signKeyMd5)){
+            throw new YyghException(ResultCodeEnum.SIGN_ERROR);
+        }
+        scheduleService.save(paramMap);
+
+        return Result.ok();
+    }
+
+
+    //医院端删除科室信息
+    @PostMapping("department/remove")
+    public Result removeDepartment(HttpServletRequest request){
+        Map<String,String[]> requestMap = request.getParameterMap();
+        Map<String,Object> paramMap = HttpRequestHelper.switchMap(requestMap);
+
+        //获取医院端传过来的 hoscode
+        String hoscode = (String) paramMap.get("hoscode");
+        //获取医院端传过来的加密后的签名
+        String hospSign = (String) paramMap.get("sign");
+        //获取医院端传过来的科室的编号
+        String depcode = (String) paramMap.get("depcode");
+        //获取后端存放着的签名
+        String signKey = hospitalSetService.getSignKey(hoscode);
+        //对后端签名进行加密
+        String signKeyMd5 = MD5.encrypt(signKey);
+        //进行验签
+        if(!hospSign.equals(signKeyMd5)){
+            throw new YyghException(ResultCodeEnum.SIGN_ERROR);
+        }
+        departmentService.remove(hoscode,depcode);
+        return Result.ok();
+
+    }
+
+    //医院端从 Mongodb 查询科室信息
+    @PostMapping("department/list")
+    public Result findDepartment(HttpServletRequest request){
+        Map<String,String[]> requestMap = request.getParameterMap();
+        Map<String,Object> paramMap = HttpRequestHelper.switchMap(requestMap);
+
+        //获取医院编号
+        String hoscode = (String) paramMap.get("hoscode");
+        //获取医院端传过来的加密后的签名
+        String hospSign = (String) paramMap.get("sign");
+        //获取后端医院的签名
+        String signKey = hospitalSetService.getSignKey(hoscode);
+        //对后端医院签名加密
+        String signKeyMd5 = MD5.encrypt(signKey);
+        //验签
+        if(!signKeyMd5.equals(hospSign)){
+            throw new YyghException(ResultCodeEnum.SIGN_ERROR);
+        }
+        //分页设置
+        int page = StringUtils.isEmpty(paramMap.get("page")) ? 1 : Integer.parseInt((String) paramMap.get("page"));
+        int limit = StringUtils.isEmpty(paramMap.get("limit")) ? 1 : Integer.parseInt((String) paramMap.get("limit"));
+
+        DepartmentQueryVo departmentQueryVo = new DepartmentQueryVo();
+        departmentQueryVo.setHoscode(hoscode);
+        Page<Department> departmentPage = departmentService.findPageDepartment(page,limit,departmentQueryVo);
+        return Result.ok(departmentPage);
+    }
+
+
+    //医院端上传科室信息到 mongodb 上
+    @PostMapping("/saveDepartment")
+    public Result saveDepartment(HttpServletRequest request){
+        Map<String,String[]> requestMap = request.getParameterMap();
+        Map<String,Object> paramMap = HttpRequestHelper.switchMap(requestMap);
+
+        //获取医院编号
+        String hoscode = (String) paramMap.get("hoscode");
+        //获取医院端传过来的已经加密过的签名
+        String hospSign = (String) paramMap.get("sign");
+        //查询后端当前医院的签名
+        String signKey = hospitalSetService.getSignKey(hoscode);
+        //对后端签名进行加密
+        String signKeyMd5 = MD5.encrypt(signKey);
+
+        //验签
+        if(!signKeyMd5.equals(hospSign)){
+            throw new YyghException(ResultCodeEnum.SIGN_ERROR);
+        }
+        departmentService.save(paramMap);
+        return Result.ok();
+    }
+
+
 
     //医院端使用的医院管理系统查询医院接口
     @RequestMapping("/hospital/show")

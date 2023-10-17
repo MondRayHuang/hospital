@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -76,10 +77,46 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         }
     }
 
+    //根据 dictCode 和 value查询数据字典名称
+    @Override
+    public String getDictName(String dictCode, String value) {
+        if(StringUtils.isEmpty(dictCode)){
+            //直接根据 value 查询
+            QueryWrapper<Dict> dictQueryWrapper = new QueryWrapper<>();
+            dictQueryWrapper.eq("value",value);
+            Dict dict = baseMapper.selectOne(dictQueryWrapper);
+            return dict.getName();
+        }else{
+            //根据 dictCode 查询 dict 对象，获取到 dict 的 id 作为 parentId
+            Dict dict = this.getDictByDictCode(dictCode);
+            Long parentId = dict.getId();
+            //根据parentId和 value 进行查询
+            Dict finalDict = baseMapper.selectOne(new QueryWrapper<Dict>().eq("parent_id",parentId)
+                    .eq("value",value));
+            return finalDict.getName();
+        }
+    }
+
+    //根据dictcode 获取下级节点
+    @Override
+    public List<Dict> findByDictCode(String dictCode) {
+        Dict dict = this.getDictByDictCode(dictCode);
+        return this.findChildData(dict.getId());
+    }
+
+    //根据 dictCode 查询dict 对象
+    private Dict getDictByDictCode(String dictCode){
+        QueryWrapper<Dict> dictQueryWrapper = new QueryWrapper<>();
+        dictQueryWrapper.eq("dict_code",dictCode);
+        return baseMapper.selectOne(dictQueryWrapper);
+    }
+
     // 判断 id 下是否有子节点
     private boolean isChildren(Long id){
         QueryWrapper<Dict> dictQueryWrapper = new QueryWrapper<>();
         dictQueryWrapper.eq("parent_id",id);
         return dictMapper.selectCount(dictQueryWrapper) > 0;
     }
+
+
 }

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Api(tags = "数据字典接口")
-@CrossOrigin
+//@CrossOrigin
 @RestController
 @RequestMapping("/admin/cmn/dict")
 public class DictController {
@@ -45,5 +45,28 @@ public class DictController {
         System.out.println(file);
         dictService.importDictData(file);
         return Result.ok();
+    }
+
+    //根据dict_code和 value 查询
+    @GetMapping("getName/{dictCode}/{value}")
+    public String getName(@PathVariable String dictCode,
+                          @PathVariable String value){
+        String dictName = dictService.getDictName(dictCode,value);
+        return dictName;
+    }
+
+    //根据 value 查询
+    @GetMapping("getName/{value}")
+    public String getName(@PathVariable String value){
+        String dictName = dictService.getDictName("",value);
+        return dictName;
+    }
+
+    //根据 dictCode查获取下级节点
+    @ApiOperation(value = "根据 dictCode 获取下级节点")
+    @GetMapping("findByDictCode/{dictCode}")
+    public Result findByDictCode(@PathVariable String dictCode){
+        List<Dict> dictList = dictService.findByDictCode(dictCode);
+        return Result.ok(dictList);
     }
 }

@@ -7,6 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/zh-CN' // lang i18n
 
 import '@/styles/index.scss' // global css
+import '@/styles/show.css' //后端医院详情页样式
 
 import App from './App'
 import router from './router'

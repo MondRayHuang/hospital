@@ -87,9 +87,35 @@ export const constantRouterMap = [
       }
     ]
   },
-
-  
-
+  {
+    path: '/hospital',
+    component: Layout,
+    redirect: '/hospotal/list',
+    name: '医院管理',
+    meta: { title: '医院列表', icon: 'example' },
+    children: [
+      {
+        path: 'list',
+        name: '医院列表',
+        component: () => import('@/views/hosp/list'),
+        meta: { title: '医院列表', icon: 'table' }
+      },
+      {
+        path: 'show/:id',
+        name: '医院详情查看',
+        component: () => import('@/views/hosp/show'),
+        meta: { title: '医院详情查看', icon: 'table' },
+        hidden: true
+      },
+      {
+        path: 'schedule/:hoscode',
+        name: '医院排班',
+        component: () => import('@/views/hosp/schedule'),
+        meta: { title: '医院排班', icon: 'table' },
+        hidden: true
+      }
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
 
