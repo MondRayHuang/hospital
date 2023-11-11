@@ -93,6 +93,7 @@
     <script>
     import '~/assets/css/hospital_personal.css'
     import '~/assets/css/hospital.css'
+    import cookie from 'js-cookie'
     
     import hospApi from '@/api/hosp'
     
@@ -135,6 +136,11 @@
         },
     
         schedule(depcode) {
+          let token = cookie.get('token')
+          if(!token){
+            loginEvent.$emit('loginDialogEvent')
+            return
+          }
           window.location.href = '/hospital/schedule?hoscode=' + this.hoscode + "&depcode="+ depcode
         }
       }
