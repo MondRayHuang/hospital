@@ -26,8 +26,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     public Map<String, Object> loginUser(LoginVo loginVo) {
         //1.获取用户的手机号
         String phone = loginVo.getPhone();
+        System.out.println(phone);
         //2.获取用户的验证码
         String code = loginVo.getCode();
+        System.out.println(code);
         //3.判断手机号和验证码是否为空
         if(StringUtils.isEmpty(phone) || StringUtils.isEmpty(code)){
             throw new YyghException(ResultCodeEnum.PARAM_ERROR);
@@ -44,6 +46,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         UserInfo userInfo = baseMapper.selectOne(queryWrapper);
         //若是第一次登录则添加当前用户
         if(userInfo == null){
+            userInfo = new UserInfo();
             userInfo.setName("");
             userInfo.setPhone(phone);
             userInfo.setStatus(1);

@@ -35,6 +35,7 @@ public class MsmApiController {
         //验证码存进redis中，并且设置有效时间
         if(isSend){
             redisTemplate.opsForValue().set(phone,code,2, TimeUnit.MINUTES);
+            System.out.println(code);
             return Result.ok();
         }else{
             return Result.fail().message("发送短信失败");

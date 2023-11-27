@@ -17,8 +17,6 @@
           <el-autocomplete
             class="search-input small"
             prefix-icon="el-icon-search"
-            v-model="state"
-            :fetch-suggestions="querySearchAsync"
             placeholder="点击输入医院名称"
             @select="handleSelect"
           >
@@ -208,7 +206,7 @@ export default {
         this.$message.error('验证码必须输入')
         return;
       }
-      if (this.userInfo.code.length != 6) {
+      if (this.userInfo.code.length != 4) {
         this.$message.error('验证码格式不正确')
         return;
       }
