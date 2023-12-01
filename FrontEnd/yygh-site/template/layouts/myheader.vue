@@ -122,6 +122,7 @@ import Vue from 'vue'
 import userInfoApi from '@/api/userInfo'
 import smsApi from '@/api/msm'
 import hospitalApi from '@/api/hosp'
+import weixinApi from '@/api/weixin'
 
 const defaultDialogAtrr = {
   showLoginType: 'phone', // 控制手机登录与微信登录切换
