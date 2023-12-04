@@ -315,6 +315,7 @@ export default {
       this.dialogAtrr.showLoginType = 'weixin'
 
       weixinApi.getLoginParam().then(response =>{
+        console.log(response.data.redirect_uri);
         var obj = new WxLogin({
           self_redirect: true,
           id: 'weixinLogin', // 需要显示的容器id

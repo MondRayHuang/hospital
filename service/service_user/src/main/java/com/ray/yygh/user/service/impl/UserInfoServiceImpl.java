@@ -79,4 +79,13 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         return map;
 
     }
+
+    //通过openid获取用户信息
+    @Override
+    public UserInfo selectWxInfoOpenId(String openid) {
+        QueryWrapper<UserInfo> userInfoQueryWrapper = new QueryWrapper<>();
+        userInfoQueryWrapper.eq("openid",openid);
+        return baseMapper.selectOne(userInfoQueryWrapper);
+
+    }
 }
