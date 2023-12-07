@@ -112,7 +112,7 @@ public class WeixinApiController {
             }else{
                 map.put("openid","");
             }
-            //生成token
+            //生成toke
             String token = JwtHelper.createToken(userInfo.getId(),name);
             map.put("token",token);
             return "redirect:" +
