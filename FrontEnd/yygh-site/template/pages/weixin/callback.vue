@@ -14,5 +14,9 @@
 
             }
         },
+        mounted(){
+            let token = this.$route.query.token
+                    
+        }
     }
 </script>
