@@ -14,9 +14,10 @@ spring:
     #配置模板路径，默认是templates，可以不用配置
     prefix: classpath:/templates/
   redis:
+    #aliyun
+    host: 120.76.249.80
     #mac
-    host: 10.211.55.4
-
+#    host: 10.211.55.4
     #win
 #    host: 192.168.140.128
     port: 6379
@@ -32,7 +33,7 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/yygh_manage?characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
+    url: jdbc:mysql://120.76.249.80:3306/yygh_manage?characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
     username: root
     password: 25583638
     hikari:
