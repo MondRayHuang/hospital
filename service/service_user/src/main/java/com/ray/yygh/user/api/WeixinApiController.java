@@ -82,7 +82,6 @@ public class WeixinApiController {
                         + "?access_token=%s" + "&openid=%s";
                 String userInfoUrl = String.format(baseUserInfoUrl,access_token,openid);
                 String resultInfo = HttpClientUtils.get(userInfoUrl);
-                System.out.println(resultInfo);
                 JSONObject resultUserInfoJson = JSON.parseObject(resultInfo);
                 //解析用户信息
                 String nickname = resultUserInfoJson.getString("nickname");

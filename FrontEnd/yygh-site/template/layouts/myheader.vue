@@ -176,9 +176,24 @@ export default {
     script.type = 'text/javascript'
     script.src = 'http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js'
     document.body.appendChild(script)
+
+    //微信登录回调
+    let self = this;
+    window["loginCallback"] = (name,token,openid) => {
+      self.loginCallback(name,token,openid);
+    }
+    
    },
     
    methods: {
+    loginCallback(name,token,openid) {
+      if(openid != ''){
+        this.userInfo.openid = openid
+        this.showLogin()
+      }else{
+        this.setCookies(names,token)
+      }
+    },
 
     // 绑定登录或获取验证码按钮
     btnClick() {

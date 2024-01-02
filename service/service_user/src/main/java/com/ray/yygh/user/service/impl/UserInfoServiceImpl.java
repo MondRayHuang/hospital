@@ -40,10 +40,22 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             throw new YyghException(ResultCodeEnum.CODE_ERROR);
         }
 
+        //判断是否第一次微信登录，如果是则绑定手机号码
+        UserInfo userInfo = null;
+        if(!StringUtils.isEmpty(loginVo.getOpenid())){
+            userInfo = this.selectWxInfoOpenId(loginVo.getOpenid());
+            if(null != userInfo){
+                userInfo.setPhone(loginVo.getPhone());
+                this.updateById(userInfo);
+            } else{
+                throw new YyghException(ResultCodeEnum.DATA_ERROR);
+            }
+        }
+
         //5.判断是否为第一次用手机号登录
         QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("phone",phone);
-        UserInfo userInfo = baseMapper.selectOne(queryWrapper);
+        userInfo = baseMapper.selectOne(queryWrapper);
         //若是第一次登录则添加当前用户
         if(userInfo == null){
             userInfo = new UserInfo();
